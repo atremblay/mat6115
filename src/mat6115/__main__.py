@@ -27,6 +27,14 @@ def parse_args():
         choices=["imdb"],
     )
 
+    parser_train.add_argument(
+        "-e",
+        "--embedding",
+        help="Initial embedding to use for words",
+        default=None,
+        choices=["glove", "fasttext", None],
+    )
+
     parser_train.add_argument("-c", "--config", help="Config file path", required=True)
     return parser.parse_args()
 
@@ -34,5 +42,6 @@ def parse_args():
 def main():
     args = parse_args()
     if args.tool == "train":
-        train.main(dataset=args.dataset)
+        __import__("ipdb").set_trace()
+        train.main(dataset=args.dataset, embedding=args.embedding)
     print(args)

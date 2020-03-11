@@ -1,6 +1,7 @@
+import torch
+from torchtext.data import BucketIterator, Field
 from torchtext.datasets import IMDB
-from torchtext.data import Field, BucketIterator
-from torchtext.vocab import GloVe, FastText
+from torchtext.vocab import FastText, GloVe
 
 TEXT = Field(sequential=True, lower=True, tokenize="spacy")
 LABEL = Field(sequential=False, use_vocab=False)
@@ -25,7 +26,7 @@ def imdb(embedding=None):
 
     # make iterator for splits
     train_iter, test_iter = BucketIterator.splits(
-        (train, test), batch_size=32, device=0
+        (train, test), batch_size=32, device=torch.device("cuda", 0)
     )
 
     return train_iter, test_iter
