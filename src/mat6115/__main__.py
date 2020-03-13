@@ -42,6 +42,7 @@ def parse_args():
 def main():
     args = parse_args()
     if args.tool == "train":
-        __import__("ipdb").set_trace()
-        train.main(dataset=args.dataset, embedding=args.embedding)
+        train.main(
+            dataset=args.dataset, embedding=args.embedding, config_file=args.config
+        )
     print(args)

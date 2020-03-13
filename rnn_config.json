@@ -1,0 +1,7 @@
+{
+    "model_type": "rnn",
+    "model_config": {
+        "hidden_size": 100
+    },
+    "embedding_dim": 300
+}
