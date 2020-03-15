@@ -1,5 +1,5 @@
 {
-    "model_type": "rnn",
+    "model_type": "gru",
     "model_config": {
         "hidden_size": 256,
         "num_layers": 1

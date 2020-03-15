@@ -71,7 +71,6 @@ dependencies:
     - blis==0.4.1
     - catalogue==1.0.0
     - cymem==2.0.3
-    - en-core-web-sm==2.2.5
     - ipdb==0.13.2
     - murmurhash==1.0.2
     - plac==1.1.3

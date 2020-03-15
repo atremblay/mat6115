@@ -43,6 +43,9 @@ def main():
     args = parse_args()
     if args.tool == "train":
         train.main(
-            dataset=args.dataset, embedding=args.embedding, config_file=args.config
+            dataset=args.dataset,
+            embedding=args.embedding,
+            config_file=args.config,
+            save_path=args.save_path,
         )
     print(args)

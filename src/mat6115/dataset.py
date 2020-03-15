@@ -1,10 +1,16 @@
 import torch
-from torchtext.data import BucketIterator, Field
+from torchtext.data import BucketIterator, Field, LabelField
 from torchtext.datasets import IMDB
 from torchtext.vocab import FastText, GloVe
 
-TEXT = Field(sequential=True, lower=True, tokenize="spacy", batch_first=True)
-LABEL = Field(sequential=False, use_vocab=True, batch_first=True)
+TEXT = Field(
+    sequential=True,
+    lower=True,
+    tokenize="spacy",
+    batch_first=True,
+    include_lengths=True,
+)
+LABEL = LabelField(dtype=torch.float, batch_first=True)
 
 
 class BucketWrapper(object):
@@ -28,7 +34,7 @@ class BucketWrapper(object):
 
     def __iter__(self):
         while True:
-            for (x, y), _ in self._bucket_iter:
+            for (x, y) in self._bucket_iter:
                 yield x, (y - 1.0).unsqueeze(-1)
 
     @property
@@ -37,8 +43,6 @@ class BucketWrapper(object):
 
 
 def imdb(embedding=None):
-    global LABEL
-    LABEL = Field(sequential=False, use_vocab=True)
 
     # make splits for data
     train, test = IMDB.splits(TEXT, LABEL)
@@ -46,7 +50,7 @@ def imdb(embedding=None):
     # build the vocabulary
 
     if embedding == "glove":
-        vectors = GloVe(name="6B", dim=300)
+        vectors = GloVe(name="6B", dim=100)
     elif embedding == "fasttext":
         vectors = FastText(language="en")
     elif embedding is None:
@@ -62,7 +66,10 @@ def imdb(embedding=None):
 
     # make iterator for splits
     train_iter, test_iter = BucketIterator.splits(
-        (train, test), batch_size=32, device=torch.device("cpu")
+        (train, test),
+        batch_size=32,
+        device=torch.device("cuda", 0),
+        sort_within_batch=True,
     )
 
-    return BucketWrapper(train_iter), BucketWrapper(test_iter)
+    return train_iter, test_iter
