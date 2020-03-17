@@ -4,5 +4,6 @@
         "hidden_size": 256,
         "num_layers": 1
     },
-    "embedding_dim": 100
+    "embedding_dim": 100,
+    "dropout": 0.5
 }

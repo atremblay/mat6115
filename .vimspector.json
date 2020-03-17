@@ -1,0 +1,26 @@
+{
+    "configurations": {
+        "<name>: Launch": {
+            "adapter": "debugpy",
+            "configuration": {
+                "name": "<name>: Launch",
+                "type": "python",
+                "request": "launch",
+                "cwd": "${workspaceRoot}",
+                "python":  "$HOME/miniconda3/envs/mat6115/bin/python",
+                "stopOnEntry": true,
+                "console": "externalTerminal",
+                "debugOptions": [],
+                "program": "src/mat6115/__main__.py",
+                "args": [
+                    "train", 
+                    "-d", "imdb", 
+                    "-c", "rnn_config.json", 
+                    "-s", "rnn_adam", 
+                    "--embedding", "glove", 
+                    "--analyze"
+                ]
+            }
+        }
+    }
+}

@@ -2,6 +2,7 @@ import torch
 from torchtext.data import BucketIterator, Field, LabelField
 from torchtext.datasets import IMDB
 from torchtext.vocab import FastText, GloVe
+import random
 
 TEXT = Field(
     sequential=True,
@@ -11,6 +12,7 @@ TEXT = Field(
     include_lengths=True,
 )
 LABEL = LabelField(dtype=torch.float, batch_first=True)
+SEED = 42
 
 
 class BucketWrapper(object):
@@ -46,30 +48,32 @@ def imdb(embedding=None):
 
     # make splits for data
     train, test = IMDB.splits(TEXT, LABEL)
+    train, valid = train.split(random_state=random.seed(SEED))
 
-    # build the vocabulary
-
-    if embedding == "glove":
-        vectors = GloVe(name="6B", dim=100)
-    elif embedding == "fasttext":
-        vectors = FastText(language="en")
-    elif embedding is None:
-        vectors = None
-    else:
-        raise Exception(f"Embedding {embedding} not supported")
-
-    TEXT.build_vocab(train, vectors=vectors, specials=["<pad>", "<null>"])
+    TEXT.build_vocab(
+        train,
+        vectors=embedding,
+        specials=["<pad>", "<null>"],
+        unk_init=torch.Tensor.normal_,
+        max_size=25000,
+    )
 
     # Need to build the vocab for the labels because they are `pos` and `neg`
     # This will convert them to numerical values
     LABEL.build_vocab(train)
 
     # make iterator for splits
-    train_iter, test_iter = BucketIterator.splits(
-        (train, test),
-        batch_size=32,
-        device=torch.device("cuda", 0),
-        sort_within_batch=True,
+    train_iter, valid_iter, test_iter = BucketIterator.splits(
+        (train, valid, test), batch_size=64, sort_within_batch=True,
     )
 
-    return train_iter, test_iter
+    return train_iter, valid_iter, test_iter
+
+
+def dataset_factory(source, embedding=None):
+    if source == "imdb":
+        train_iter, valid_iter, test_iter = imdb(embedding)
+    else:
+        raise ValueError("not implemented")
+
+    return train_iter, valid_iter, test_iter
