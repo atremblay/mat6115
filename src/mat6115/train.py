@@ -18,13 +18,13 @@ from mat6115.model import Net
 
 
 def custom_loss(y_pred, y_true):
-    y_pred, _, _ = y_pred
+    y_pred = y_pred[0]
     loss = nn.BCEWithLogitsLoss()
     return loss(y_pred, y_true)
 
 
 def acc(y_pred, y_true):
-    y_pred, _, _ = y_pred
+    y_pred = y_pred[0]
     return ((y_pred >= 0.0) == y_true).sum().float() / y_pred.shape[0]
 
 

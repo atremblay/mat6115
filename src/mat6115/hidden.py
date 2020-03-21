@@ -70,7 +70,7 @@ def get_hidden(model, iterator, N=1000):
     num_batch = N // batch_size
 
     _, _, preds, y_true = model.evaluate_generator(
-        iterator, return_pred=True, return_ground_truth=True
+        iterator, return_pred=True, return_ground_truth=True, steps=num_batch + 1
     )
     # y_pred, outputs, output_lenghts = zip(*preds)
 
@@ -78,11 +78,11 @@ def get_hidden(model, iterator, N=1000):
     num_hidden_states = 0
     ground_truth = []
     model_preds = []
-    for i, (y_pred, outputs, output_lengths) in enumerate(preds):
+    for i, (y_pred, outputs, output_lengths, _) in enumerate(preds):
         for j, (output, length) in enumerate(zip(outputs, output_lengths)):
             try:
                 num_hidden_states += length
-                flat_hidden_state.extend([o[:length] for o in output])
+                flat_hidden_state.append([o[:length] for o in output])
                 ground_truth.extend([y_true[i][j]] * length)
                 model_preds.extend([int(y_pred[j] > 0.0)] * length)
             except:
@@ -91,18 +91,20 @@ def get_hidden(model, iterator, N=1000):
         if i >= num_batch:
             break
 
-    __import__("pdb").set_trace()
     num_layers, _, hidden_state_dim = output.shape
     # fhs = np.empty((num_hidden_states, num_layers, hidden_state_dim))
-    fhs = [] * num_layers
+    fhs = []
+    for _ in range(num_layers):
+        fhs.append([])
+
     for batch in flat_hidden_state:
         for i, output in enumerate(batch):
             fhs[i].extend(output)
 
-    flat_hidden_state = [np.array(hs) for hs in fhs]
+    flat_hidden_state = np.array(fhs)
     ground_truth = np.array(ground_truth)
     model_preds = np.array(model_preds)
-    assert flat_hidden_state.shape[0] == num_hidden_states
+    assert flat_hidden_state.shape[1] == num_hidden_states
     return flat_hidden_state, model_preds, ground_truth
 
 

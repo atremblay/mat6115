@@ -57,6 +57,7 @@ def imdb(embedding=None):
         unk_init=torch.Tensor.normal_,
         max_size=25000,
     )
+    TEXT.null_token = "<null>"
 
     # Need to build the vocab for the labels because they are `pos` and `neg`
     # This will convert them to numerical values

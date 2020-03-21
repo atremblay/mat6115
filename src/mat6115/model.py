@@ -24,6 +24,7 @@ class RNN(nn.Module):
         n_layers,
         dropout,
         pad_idx,
+        null_idx,
         rnn_type,
     ):
 
@@ -73,8 +74,7 @@ class RNN(nn.Module):
 
         self.dropout = nn.Dropout(dropout)
 
-    def forward(self, text, text_lengths):
-
+    def forward(self, text, text_lengths, hidden_state=None):
         # text = [sent len, batch size]
 
         embedded = self.dropout(self.embedding(text))
@@ -89,9 +89,11 @@ class RNN(nn.Module):
         outputs = []
         for rnn in self.rnn:
             if self.rnn_type == "lstm":
-                X, (hidden, cell) = rnn(X)
+                X, hidden_state = rnn(X, hidden_state)
+                hidden, _ = hidden_state
             else:
-                X, hidden = rnn(X)
+                X, hidden_state = rnn(X)
+                hidden = hidden_state
             # unpack sequence
             output, output_lengths = nn.utils.rnn.pad_packed_sequence(
                 X, batch_first=True
@@ -101,7 +103,7 @@ class RNN(nn.Module):
 
         hidden = self.dropout(hidden[-1])
 
-        return self.predictor(hidden).squeeze(-1), outputs, output_lengths
+        return self.predictor(hidden).squeeze(-1), outputs, output_lengths, hidden_state
 
 
 class Net(nn.Module):

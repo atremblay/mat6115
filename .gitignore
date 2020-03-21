@@ -131,4 +131,6 @@ dmypy.json
 # specific to the project
 .data
 rnn*/
+gru*/
+lstm*/
 .vector_cache/
