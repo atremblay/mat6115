@@ -14,7 +14,8 @@ from torch.utils.tensorboard import SummaryWriter
 
 from mat6115.dataset import TEXT, dataset_factory
 from mat6115.hidden import run_and_save_hidden, analysis
-from mat6115.model import Net
+from mat6115.model import RNN
+from pathlib import Path
 
 
 def custom_loss(y_pred, y_true):
@@ -28,75 +29,57 @@ def acc(y_pred, y_true):
     return ((y_pred >= 0.0) == y_true).sum().float() / y_pred.shape[0]
 
 
-def build_model_config(config_file):
-
-    with open(config_file) as f:
-        config = json.load(f)
-
-    model_type = config["model_type"]
-    model_config = config["model_config"]
-    model_config["model_type"] = model_type
-    model_config["input_size"] = config["embedding_dim"]
-    model_config["padding_idx"] = TEXT.vocab.stoi[TEXT.pad_token]
-    model_config["unk_idx"] = TEXT.vocab.stoi[TEXT.unk_token]
-    model_config["num_embeddings"] = len(TEXT.vocab)
-    model_config["embedding_dim"] = config["embedding_dim"]
-    model_config["null_idx"] = TEXT.vocab["<null>"]
-    model_config["dropout"] = config["dropout"]
-
-    return model_config
-
-
-def main(dataset, embedding, config_file, save_path, analyze, device):
-    train_iter, test_iter = dataset_factory(dataset, embedding=embedding)
-
+def main(rnn_type, n_layers, dataset, embedding, device):
+    train_iter, valid_iter, test_iter = dataset_factory(dataset, embedding=embedding)
+    save_path = Path(f"{rnn_type}_{n_layers}layer")
     save_path.mkdir(parents=True, exist_ok=True)
-    model_config = build_model_config(config_file)
-    with open(save_path / "kwargs.json", "w") as model_config_file:
-        json.dump(model_config, model_config_file)
+    embedding_dim = int(embedding.split(".")[-1][:-1])
+    kwargs = dict(
+        vocab_size=len(TEXT.vocab),
+        embedding_dim=embedding_dim,
+        hidden_dim=256,
+        output_dim=1,
+        n_layers=n_layers,
+        dropout=0.5,
+        pad_idx=TEXT.vocab.stoi[TEXT.pad_token],
+        rnn_type="gru",
+    )
+    with open(save_path / "kwargs.json", "w") as kwargs_file:
+        json.dump(kwargs, kwargs_file)
 
-    network = Net(**model_config)
+    pretrained_embeddings = TEXT.vocab.vectors
+
+    network = RNN(**kwargs)
+    network.embedding.weight.data.copy_(pretrained_embeddings)
+    UNK_IDX = TEXT.vocab.stoi[TEXT.unk_token]
+    PAD_IDX = TEXT.vocab.stoi[TEXT.pad_token]
+
+    network.embedding.weight.data[UNK_IDX] = torch.zeros(embedding_dim)
+    network.embedding.weight.data[PAD_IDX] = torch.zeros(embedding_dim)
 
     optimizer = torch.optim.Adam(network.parameters())
-    # optimizer = torch.optim.RMSprop(network.parameters())
-    # optimizer = torch.optim.SGD(
-    # network.parameters(), lr=0.001, nesterov=True, momentum=0.5
-    # )
-
-    writer = SummaryWriter(save_path / "runs")
-    tb_logger = TensorBoardLogger(writer)
-
-    model = Model(network, optimizer, custom_loss, batch_metrics=[acc],)
+    model = Model(
+        network=network,
+        optimizer=optimizer,
+        loss_function=custom_loss,
+        batch_metrics=[acc],
+    )
     model.to(device)
 
-    if analysis:
-        hidden = run_and_save_hidden(
-            model, save_path / "flat_hidden_state_pre_training.npy", test_iter
-        )
-        analysis(hidden, save_path / "pca_pre_training_full.pkl")
-        analysis(hidden, save_path / "pca_pre_training_2.pkl", n_components=2)
-
-    model.fit_generator(
+    history = model.fit_generator(
         train_generator=train_iter,
-        valid_generator=test_iter,
-        epochs=500,
+        valid_generator=valid_iter,
+        epochs=10,
         callbacks=[
             ModelCheckpoint(
-                filename=str(save_path) + "/model.pkl",
+                filename=str(save_path / "model.pkl"),
                 save_best_only=True,
                 restore_best=True,
-            ),
-            tb_logger,
-            EarlyStopping(min_delta=0.0001, patience=25),
+            )
         ],
     )
+    test_loss, test_acc, y_pred, y_true = model.evaluate_generator(
+        generator=test_iter, return_pred=True, return_ground_truth=True
+    )
+    print(f"Test Loss: {test_loss:.4f}, Test Binary Accuracy: {test_acc:.4f}")
 
-    with open(save_path / "full_model.pkl", "wb") as model_file:
-        pickle.dump(model, model_file)
-
-    if analysis:
-        hidden = run_and_save_hidden(
-            model, save_path / "flat_hidden_state.npy", test_iter
-        )
-        analysis(hidden, save_path / "pca_full.pkl")
-        analysis(hidden, save_path / "pca_2.pkl", n_components=2)

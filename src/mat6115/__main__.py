@@ -1,7 +1,7 @@
 import torch
 import argparse
 from pathlib import Path
-from mat6115 import train, hidden
+from mat6115 import train, analysis
 
 
 def parse_args():
@@ -27,34 +27,49 @@ def parse_args():
         default="imdb",
         choices=["imdb"],
     )
+    parser_train.add_argument(
+        "--rnn_type", help="Type of RNN layer", default="gru", choices=["gru", "rnn"],
+    )
+
+    parser_train.add_argument("--n_layers", default=1, type=int)
 
     parser_train.add_argument(
         "-e",
         "--embedding",
         help="Initial embedding to use for words",
-        default=None,
-        choices=["glove", "fasttext", None],
+        default="glove.6B.100d",
+        choices=[
+            "charngram.100d",
+            "fasttext.en.300d",
+            "fasttext.simple.300d",
+            "glove.42B.300d",
+            "glove.840B.300d",
+            "glove.twitter.27B.25d",
+            "glove.twitter.27B.50d",
+            "glove.twitter.27B.100d",
+            "glove.twitter.27B.200d",
+            "glove.6B.50d",
+            "glove.6B.100d",
+            "glove.6B.200d",
+            "glove.6B.300d",
+        ],
     )
 
-    parser_train.add_argument(
-        "--analyze",
-        help="Save the hidden states for the test set",
-        default=False,
-        action="store_true",
-    )
-
-    parser_train.add_argument("-c", "--config", help="Config file path", required=True)
     parser_train.add_argument("--cuda", type=int, help="Cuda device to use")
 
-    parser_hidden = subparsers.add_parser(
-        "hidden", help="Run the test set through the model and save the hidden states."
+    parser_artifacts = subparsers.add_parser(
+        "artifacts", help="Create artifacts for further analysis."
     )
 
-    parser_hidden.add_argument(
-        "-m", "--model_path", help="Path to the saved model.", required=True, type=Path,
+    parser_artifacts.add_argument(
+        "-s",
+        "--save_path",
+        help="Path to the saved model. The artifacts will also be saved there.",
+        required=True,
+        type=Path,
     )
 
-    parser_hidden.add_argument(
+    parser_artifacts.add_argument(
         "-d",
         "--dataset",
         help="Supported dataset: imdb",
@@ -62,41 +77,72 @@ def parse_args():
         choices=["imdb"],
     )
 
-    parser_hidden.add_argument(
-        "-s",
-        "--save_path",
-        help="Path where to save all the files (default .)",
-        default=".",
-        type=Path,
+    parser_artifacts.add_argument(
+        "-e",
+        "--embedding",
+        help="Initial embedding to use for words",
+        default="glove.6B.100d",
+        choices=[
+            "charngram.100d",
+            "fasttext.en.300d",
+            "fasttext.simple.300d",
+            "glove.42B.300d",
+            "glove.840B.300d",
+            "glove.twitter.27B.25d",
+            "glove.twitter.27B.50d",
+            "glove.twitter.27B.100d",
+            "glove.twitter.27B.200d",
+            "glove.6B.50d",
+            "glove.6B.100d",
+            "glove.6B.200d",
+            "glove.6B.300d",
+        ],
+    )
+    parser_artifacts.add_argument(
+        "--rnn_layer",
+        default=1,
+        type=int,
+        help="What RNN layer to use to create the artifacts",
     )
 
-    parser_hidden.add_argument("-c", "--config", help="Config file path", required=True)
+    parser_artifacts.add_argument("--fixed_point", action="store_true", default=False)
+
+    parser_artifacts.add_argument("--cuda", type=int, help="Cuda device to use")
+    parser_artifacts.add_argument(
+        "--unique_fixed_point", action="store_true", default=False
+    )
+    parser_artifacts.add_argument("--pca", action="store_true", default=False)
 
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    if args.tool == "train":
-        if args.cuda is not None:
-            device = torch.device("cuda", args.cuda)
-        else:
-            device = torch.device("cpu")
+    if args.cuda is not None:
+        device = torch.device("cuda", args.cuda)
+    else:
+        device = torch.device("cpu")
 
+    if args.tool == "train":
         train.main(
+            rnn_type=args.rnn_type,
+            n_layers=args.n_layers,
             dataset=args.dataset,
             embedding=args.embedding,
-            config_file=args.config,
-            save_path=args.save_path,
-            analyze=args.analyze,
             device=device,
         )
-    elif args.tool == "hidden":
-        print("Running `hidden` tool")
-        hidden.main(
-            model_path=args.model_path, dataset=args.dataset, save_path=args.save_path,
+    elif args.tool == "artifacts":
+        print("Running `artifacts` tool")
+        analysis.main(
+            save_path=args.save_path,
+            dataset=args.dataset,
+            embedding=args.embedding,
+            rnn_layer=args.rnn_layer,
+            device=device,
+            fixed_point=args.fixed_point,
+            unique_fixed_point=args.unique_fixed_point,
+            pca=args.pca,
         )
-    print(args)
 
 
 if __name__ == "__main__":

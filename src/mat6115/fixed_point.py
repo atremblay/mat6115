@@ -65,7 +65,14 @@ class FixedPointFinder(object):
 
     """Utility class to find fixed point of a Pytorch RNN Cell"""
 
-    def __init__(self, rnn_cell, device, lr=0.001, n_iter=200000, batch_size=512):
+    def __init__(
+        self,
+        rnn_cell,
+        device=torch.device("cpu"),
+        lr=0.001,
+        n_iter=200000,
+        batch_size=512,
+    ):
         """
         Parameters
         ----------
@@ -77,14 +84,10 @@ class FixedPointFinder(object):
         """
         self._rnn_cell = rnn_cell
         self._batch_size = batch_size
-        # self._rnn_cell = RNNWrapper(rnn_cell)
         self._rnn_cell.to(device)
         self._lr = lr
         self._device = device
         self._n_iter = n_iter
-
-        for param in self._rnn_cell.parameters():
-            param.requires_grad = False
 
     def run(self, hidden_state, constant_input):
         constant_input.requires_grad = False
@@ -110,8 +113,9 @@ class FixedPointFinder(object):
                 assert self.constant_input.shape[0] == self.hidden_state.shape[1]
 
             def __len__(self):
-                l = self.constant_input.shape[0] // self._batch_size
-                l += 1 if l % self._batch_size != 0 else 0
+                num_items = self.constant_input.shape[0]
+                l = num_items // self._batch_size
+                l += 1 if num_items % self._batch_size != 0 else 0
                 return l
 
             def __iter__(self):
@@ -153,6 +157,32 @@ class FixedPointFinder(object):
             hidden_state.squeeze(),
             _speed_loss(np.squeeze(trained), np.squeeze(output)),
         )
+
+    def calc_jacobian(self, fixed_point, constant_input):
+        fixed_point = fixed_point.to(self._device)
+        fixed_point.requires_grad = True
+        constant_input = constant_input.to(self._device)
+        constant_input.requires_grad = True
+        output, _ = self._rnn_cell(constant_input, fixed_point)
+
+        jacobian_h = torch.zeros(self._rnn_cell.hidden_size, self._rnn_cell.hidden_size)
+        jacobian_i = torch.zeros(self._rnn_cell.hidden_size, self._rnn_cell.input_size)
+        for i in range(self._rnn_cell.hidden_size):
+            grad_output = torch.zeros(1, 1, self._rnn_cell.hidden_size).to(self._device)
+            grad_output[0, 0, i] = 1.0
+            # Other option would be to use torch.autograd.backward
+            # Then we would have to `.grad.zero_()` the fixed_point
+            # at each iteration
+            jacobians = torch.autograd.grad(
+                output,
+                (fixed_point, constant_input),
+                grad_outputs=grad_output,
+                retain_graph=True,
+            )
+            jacobian_h[i] = jacobians[0].squeeze()
+            jacobian_i[i] = jacobians[1].squeeze()
+
+        return jacobian_h.numpy(), jacobian_i.numpy()
 
 
 if __name__ == "__main__":

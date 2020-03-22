@@ -24,7 +24,6 @@ class RNN(nn.Module):
         n_layers,
         dropout,
         pad_idx,
-        null_idx,
         rnn_type,
     ):
 
