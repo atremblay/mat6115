@@ -39,31 +39,6 @@ def speed_loss(
     return torch.dist(y_true, y_pred) ** 2 / y_true.shape[-2]  # np.prod(y_true.shape)
 
 
-class RNNWrapper(nn.Module):
-
-    """Docstring for RNNWrapper. """
-
-    def __init__(self, rnn_cell):
-        """TODO: to be defined.
-
-        :rnn_cell: TODO
-
-        """
-        nn.Module.__init__(self)
-
-        self._rnn_cell = rnn_cell
-
-    def forward(self, constant_input, hidden_state):
-        return self._rnn_cell(constant_input, hidden_state)
-
-
-def collate_fn(data):
-    constant_input = torch.cat([d[0][0] for d in data], dim=0).unsqueeze(1)
-    hidden_state = torch.cat([d[0][1] for d in data], dim=0).unsqueeze(0)
-    target = torch.cat([d[1] for d in data], dim=0).unsqueeze(0)
-    return (constant_input, hidden_state), target
-
-
 class FixedPointFinder(object):
 
     """Utility class to find fixed point of a Pytorch RNN Cell"""
@@ -196,19 +171,4 @@ class FixedPointFinder(object):
             jacobian_i[i] = jacobians[1].squeeze()
 
         return jacobian_h.numpy(), jacobian_i.numpy()
-
-
-if __name__ == "__main__":
-    device = torch.device("cuda", 0)
-    rnn = nn.GRU(input_size=100, hidden_size=256, batch_first=True)
-    constant_input = torch.zeros((2 ** 16, 1, 100)).to(device)
-    hidden_state = nn.init.normal_(torch.empty((1, 2 ** 16, 256))).to(device)
-
-    fixed_point_finder = FixedPointFinder(
-        rnn_cell=rnn, device=device, n_iter=20000, lr=0.01
-    )
-    point, is_fixed_point = fixed_point_finder.run(
-        hidden_state, constant_input, batch_size=256
-    )
-    print(f"Found {is_fixed_point.sum()} fixed points")
 
