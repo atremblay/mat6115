@@ -69,7 +69,7 @@ def main(rnn_type, n_layers, dataset, embedding, device):
     history = model.fit_generator(
         train_generator=train_iter,
         valid_generator=valid_iter,
-        epochs=10,
+        epochs=5,
         callbacks=[
             ModelCheckpoint(
                 filename=str(save_path / "model.pkl"),
@@ -82,4 +82,4 @@ def main(rnn_type, n_layers, dataset, embedding, device):
         generator=test_iter, return_pred=True, return_ground_truth=True
     )
     print(f"Test Loss: {test_loss:.4f}, Test Binary Accuracy: {test_acc:.4f}")
-
+    print(f"Model saved to {save_path}")

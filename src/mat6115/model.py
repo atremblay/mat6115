@@ -38,7 +38,7 @@ class RNN(nn.Module):
                     nn.RNN(
                         embedding_dim if (i == 0) else hidden_dim,
                         hidden_dim,
-                        dropout=dropout if (i < n_layers) else 0.0,
+                        dropout=dropout if (i < n_layers - 1) else 0.0,
                         batch_first=True,
                     )
                     for i in range(n_layers)
@@ -50,7 +50,7 @@ class RNN(nn.Module):
                     nn.LSTM(
                         embedding_dim if (i == 0) else hidden_dim,
                         hidden_dim,
-                        dropout=dropout if (i < n_layers) else 0.0,
+                        dropout=dropout if (i < n_layers - 1) else 0.0,
                         batch_first=True,
                     )
                     for i in range(n_layers)
@@ -62,7 +62,7 @@ class RNN(nn.Module):
                     nn.GRU(
                         embedding_dim if (i == 0) else hidden_dim,
                         hidden_dim,
-                        dropout=dropout if (i < n_layers) else 0.0,
+                        dropout=dropout if (i < n_layers - 1) else 0.0,
                         batch_first=True,
                     )
                     for i in range(n_layers)

@@ -1,6 +1,8 @@
 from poutyne.framework import Model
-from poutyne.framework.callbacks import EarlyStopping
+from poutyne.framework.callbacks import EarlyStopping, ModelCheckpoint
+from poutyne.framework.callbacks.lr_scheduler import StepLR
 import torch
+from tempfile import NamedTemporaryFile
 from torch.utils.data import DataLoader, Dataset
 from torch import nn
 from typing import Union, Tuple
@@ -33,6 +35,7 @@ def speed_loss(
     # to the hidden state we are interested in.
     # return _speed_loss(y_pred, y_true).sum() / np.prod(y_true.shape)
     y_pred, _ = y_pred
+    return ((y_true - y_pred) ** 2).mean()
     return torch.dist(y_true, y_pred) ** 2 / y_true.shape[-2]  # np.prod(y_true.shape)
 
 
@@ -130,13 +133,23 @@ class FixedPointFinder(object):
         model = Model(
             network=self._rnn_cell,
             loss_function=speed_loss,
-            optimizer=torch.optim.SGD(params=[hidden_state], lr=self._lr),
+            optimizer=torch.optim.Adam(params=[hidden_state], lr=self._lr),
         )
 
         model.fit_generator(
             DataIterator(constant_input, hidden_state, batch_size=self._batch_size),
             epochs=self._n_iter,
             verbose=True,
+            callbacks=[
+                StepLR(step_size=1000, gamma=0.5),
+                # EarlyStopping(monitor="loss", min_delta=1e-6, patience=1000),
+                ModelCheckpoint(
+                    filename=NamedTemporaryFile().name,
+                    monitor="loss",
+                    save_best_only=True,
+                    restore_best=True,
+                ),
+            ],
         )
 
         trained = hidden_state.clone().detach()

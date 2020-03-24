@@ -62,8 +62,8 @@ def parse_args():
     )
 
     parser_artifacts.add_argument(
-        "-s",
-        "--save_path",
+        "-l",
+        "--load_path",
         help="Path to the saved model. The artifacts will also be saved there.",
         required=True,
         type=Path,
@@ -134,7 +134,7 @@ def main():
     elif args.tool == "artifacts":
         print("Running `artifacts` tool")
         analysis.main(
-            save_path=args.save_path,
+            load_path=args.load_path,
             dataset=args.dataset,
             embedding=args.embedding,
             rnn_layer=args.rnn_layer,
