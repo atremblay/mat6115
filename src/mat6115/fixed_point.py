@@ -34,9 +34,36 @@ def speed_loss(
     # In the case of a fixed point we pass only one input, so this corresponds
     # to the hidden state we are interested in.
     # return _speed_loss(y_pred, y_true).sum() / np.prod(y_true.shape)
-    y_pred, _ = y_pred
+    if isinstance(y_pred, tuple):
+        y_pred, _ = y_pred
     return ((y_true - y_pred) ** 2).mean()
-    return torch.dist(y_true, y_pred) ** 2 / y_true.shape[-2]  # np.prod(y_true.shape)
+
+
+class RNNWrapper(nn.Module):
+
+    """
+    Wrapper around a single RNNCell or a list of RNNCells.
+
+    If a single RNNCell is given, then it behaves exactly like the original
+    RNN cell. If it's a list, it iterates through the list, passing the
+    intermediary hidden states as input to the next layer.
+
+    The goal of this is to circumvent the limitation of multiple layers
+    of Pytorch *not* returning the intermediate layers.
+    """
+
+    def __init__(self, rnn_cell):
+        """TODO: to be defined.
+
+        :rnn_cell: TODO
+
+        """
+        nn.Module.__init__(self)
+
+        self._rnn_cell = rnn_cell
+
+    def forward(self, constant_input, hidden_state):
+        return self._rnn_cell(constant_input, hidden_state)
 
 
 class FixedPointFinder(object):
@@ -48,7 +75,7 @@ class FixedPointFinder(object):
         rnn_cell,
         device=torch.device("cpu"),
         lr=0.001,
-        n_iter=200000,
+        n_iter=2000,
         batch_size=512,
     ):
         """
@@ -67,7 +94,7 @@ class FixedPointFinder(object):
         self._device = device
         self._n_iter = n_iter
 
-    def run(self, hidden_state, constant_input):
+    def run(self, constant_input, hidden_state):
         constant_input.requires_grad = False
         hidden_state.requires_grad = True
 
@@ -114,10 +141,10 @@ class FixedPointFinder(object):
         model.fit_generator(
             DataIterator(constant_input, hidden_state, batch_size=self._batch_size),
             epochs=self._n_iter,
-            verbose=True,
+            verbose=False,
             callbacks=[
                 StepLR(step_size=1000, gamma=0.5),
-                # EarlyStopping(monitor="loss", min_delta=1e-6, patience=1000),
+                EarlyStopping(monitor="loss", min_delta=1e-6, patience=1000),
                 ModelCheckpoint(
                     filename=NamedTemporaryFile().name,
                     monitor="loss",

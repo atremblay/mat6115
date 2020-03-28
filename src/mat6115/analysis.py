@@ -5,14 +5,16 @@ import numpy as np
 from mat6115.dataset import dataset_factory, TEXT, LABEL, SEED
 from mat6115.model import RNN
 from mat6115.train import custom_loss, acc
-from mat6115.fixed_point import FixedPointFinder
+from mat6115.fixed_point import FixedPointFinder, RNNWrapper
 from poutyne.framework import Model
+import tqdm
 import torch
 from torch import nn
 from pathlib import Path
 import pickle
 import json
 
+np.random.seed(SEED)
 torch.manual_seed(SEED)
 torch.backends.cudnn.deterministic = True
 
@@ -122,6 +124,20 @@ def unique_fixed(fixed_points, threshold=1e-3):
     return fixed_points[np.array(unique)]
 
 
+def find_fixed_point(rnn, constant_input, hidden_states, device):
+    points, diffs = [], []
+    for i in tqdm.trange(constant_input.shape[0]):
+        fixed_point_finder = FixedPointFinder(
+            rnn_cell=rnn, lr=0.01, n_iter=50000, device=device, batch_size=512,
+        )
+        point, diff = fixed_point_finder.run(
+            constant_input[i : i + 1], hidden_states[:, i : i + 1]
+        )
+        points.append(point)
+        diffs.append(diff)
+    return np.array(points), np.array(diffs)
+
+
 def main(
     load_path,
     dataset,
@@ -179,35 +195,39 @@ def main(
         trained_model = load_model(load_path, restore=True)
 
         trained_model.to(device)
-        trained_hidden_states, _, _ = get_hidden(trained_model, test_iter, N=5000)
-
-        random_idx = np.arange(trained_hidden_states.shape[1])
-        np.random.shuffle(random_idx)
-        random_idx = random_idx[:50000]
-        trained_hidden_states = trained_hidden_states[:, random_idx]
-        hidden_states = (
-            torch.tensor(trained_hidden_states[rnn_layer]).unsqueeze(0).to(device)
+        trained_hidden_states, _, trained_ground_truth = get_hidden(
+            trained_model, test_iter, N=1000
         )
 
     if fixed_point:
-        fixed_point_finder = FixedPointFinder(
-            rnn_cell=trained_model.network.rnn[rnn_layer],
-            lr=0.01,
-            n_iter=5000,
-            device=device,
-            batch_size=512,
+        random_idx = np.arange(trained_hidden_states.shape[1])
+        np.random.shuffle(random_idx)
+        random_idx = random_idx[:1000]
+        # trained_hidden_states = trained_hidden_states[:, random_idx]
+        hidden_states = (
+            torch.tensor(trained_hidden_states[rnn_layer, random_idx])
+            .unsqueeze(0)
+            .to(device)
         )
 
         input_dim = trained_model.network.rnn[rnn_layer].input_size
         num_inputs = hidden_states.shape[1]
         constant_input = torch.zeros((num_inputs, 1, input_dim)).to(device)
 
-        point, diff = fixed_point_finder.run(hidden_states, constant_input)
-        is_fixed_point = diff <= 1e-7
-        print(f"Found {is_fixed_point.sum()} fixed points")
+        point, diff = find_fixed_point(
+            trained_model.network.rnn[rnn_layer], constant_input, hidden_states, device
+        )
+        is_fixed_point = diff <= 1e-6
+        print(f"{is_fixed_point.sum()} points converged.")
         print(f"min q-value: {diff.min()}")
         np.save(
             open(save_path / "fixed_points.npy", "wb"), point[is_fixed_point],
+        )
+        np.save(
+            open(save_path / "converged_points.npy", "wb"), point,
+        )
+        np.save(
+            open(save_path / "diff.npy", "wb"), diff,
         )
 
     if unique_fixed_point:
@@ -218,8 +238,16 @@ def main(
     if pca:
         vanilla_model = load_model(load_path)
         vanilla_model.to(device)
-        vanilla_hidden_states, _, _ = get_hidden(vanilla_model, test_iter, N=5000)
-        vanilla_hidden_states[:, random_idx]
+        vanilla_hidden_states, _, vanilla_ground_truth = get_hidden(
+            vanilla_model, test_iter, N=1000
+        )
+        vanilla_hidden_states = torch.tensor(vanilla_hidden_states).to(device)
+
+        # Save the ground truth
+        with open(load_path / "trained_ground_truth.npy", "wb") as f:
+            np.save(f, trained_ground_truth)
+        with open(load_path / "vanilla_ground_truth.npy", "wb") as f:
+            np.save(f, vanilla_ground_truth)
 
         for rnn_layer in range(vanilla_hidden_states.shape[0]):
             save_path = load_path / str(rnn_layer + 1)
@@ -250,5 +278,6 @@ def main(
             transformed = pca.fit_transform(trained_hidden_states[rnn_layer])
             with open(save_path / "pca_trained_n2.pkl", "wb") as f:
                 pickle.dump(pca, f)
-            with open(save_path / "transformed_trained.npy", "wb") as f:
+            with open(save_path / "transformed_trained_n2.npy", "wb") as f:
                 np.save(f, transformed)
+

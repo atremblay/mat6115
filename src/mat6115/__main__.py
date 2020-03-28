@@ -1,7 +1,10 @@
 import torch
 import argparse
 from pathlib import Path
-from mat6115 import train, analysis
+from mat6115 import train, analysis, dataset
+import numpy as np
+
+np.random.seed(dataset.SEED)
 
 
 def parse_args():

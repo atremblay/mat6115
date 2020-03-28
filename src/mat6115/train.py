@@ -69,7 +69,7 @@ def main(rnn_type, n_layers, dataset, embedding, device):
     history = model.fit_generator(
         train_generator=train_iter,
         valid_generator=valid_iter,
-        epochs=5,
+        epochs=10,
         callbacks=[
             ModelCheckpoint(
                 filename=str(save_path / "model.pkl"),
