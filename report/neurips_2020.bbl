@@ -1,0 +1,26 @@
+\begin{thebibliography}{1}
+
+\bibitem{maheswaranathan2019reverse}
+Niru Maheswaranathan, Alex Williams, Matthew~D. Golub, Surya Ganguli, and David
+  Sussillo.
+\newblock Reverse engineering recurrent networks for sentiment classification
+  reveals line attractor dynamics, 2019.
+
+\bibitem{mikolov2013efficient}
+Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean.
+\newblock Efficient estimation of word representations in vector space, 2013.
+
+\bibitem{mikolov2018advances}
+Tomas Mikolov, Edouard Grave, Piotr Bojanowski, Christian Puhrsch, and Armand
+  Joulin.
+\newblock Advances in pre-training distributed word representations.
+\newblock In {\em Proceedings of the International Conference on Language
+  Resources and Evaluation (LREC 2018)}, 2018.
+
+\bibitem{pennington2014glove}
+Jeffrey Pennington, Richard Socher, and Christopher~D. Manning.
+\newblock Glove: Global vectors for word representation.
+\newblock In {\em Empirical Methods in Natural Language Processing (EMNLP)},
+  pages 1532--1543, 2014.
+
+\end{thebibliography}

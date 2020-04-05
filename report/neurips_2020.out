@@ -1,0 +1,17 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Methods}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Preliminaries}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Training}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Fixed Point}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Results}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{Dynamics are low dimensional}{section.3}% 7
+\BOOKMARK [3][-]{subsubsection.3.1.1}{PCA}{subsection.3.1}% 8
+\BOOKMARK [3][-]{subsubsection.3.1.2}{Projections}{subsection.3.1}% 9
+\BOOKMARK [3][-]{subsubsection.3.1.3}{Fixed Points}{subsection.3.1}% 10
+\BOOKMARK [3][-]{subsubsection.3.1.4}{Linearization}{subsection.3.1}% 11
+\BOOKMARK [1][-]{section.4}{Discussion}{}% 12
+\BOOKMARK [1][-]{section.5}{Futur direction}{}% 13
+\BOOKMARK [2][-]{subsection.Alph0.1}{Model architecture}{section.5}% 14
+\BOOKMARK [2][-]{subsection.Alph0.2}{Another appendix Subsection}{section.5}% 15
+\BOOKMARK [2][-]{subsection.Alph0.3}{2 layers}{section.5}% 16
+\BOOKMARK [2][-]{subsection.Alph0.4}{4 layers}{section.5}% 17
