@@ -29,11 +29,11 @@ def acc(y_pred, y_true):
     return ((y_pred >= 0.0) == y_true).sum().float() / y_pred.shape[0]
 
 
-def main(rnn_type, n_layers, dataset, embedding, device):
+def main(rnn_type, n_layers, dataset, embedding, device, save_path):
     train_iter, valid_iter, test_iter = dataset_factory(dataset, embedding=embedding)
-    save_path = Path(f"{rnn_type}_{n_layers}layer")
-    save_path.mkdir(parents=True, exist_ok=True)
     embedding_dim = int(embedding.split(".")[-1][:-1])
+    save_path = Path(save_path) / f"{rnn_type}_{n_layers}layer_{embedding_dim}"
+    save_path.mkdir(parents=True, exist_ok=True)
     kwargs = dict(
         vocab_size=len(TEXT.vocab),
         embedding_dim=embedding_dim,
@@ -78,8 +78,9 @@ def main(rnn_type, n_layers, dataset, embedding, device):
             )
         ],
     )
+    print(f"Model saved to {save_path}")
+    __import__("pudb").set_trace()
     test_loss, test_acc, y_pred, y_true = model.evaluate_generator(
         generator=test_iter, return_pred=True, return_ground_truth=True
     )
     print(f"Test Loss: {test_loss:.4f}, Test Binary Accuracy: {test_acc:.4f}")
-    print(f"Model saved to {save_path}")
