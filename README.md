@@ -18,8 +18,9 @@ Then some command line tools are available
 
 Run the model training
 `mat6115 train --n_layers 3 --cuda 1 --rnn_type gru`
+
 Run the artifacts
-`mat6115 artifacts -l gru_$ilayer_100 --rnn_layer $j  --fixed_point --unique_fixed_point --pca`
+`mat6115 artifacts -l gru_3layer_100 --rnn_layer 1  --fixed_point --unique_fixed_point --pca`
 
 ```
 ❯ mat6115 -h
