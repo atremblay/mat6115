@@ -16,18 +16,25 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{lstm}
+\citation{cho2014learning}
+\citation{collins2016capacity}
+\citation{IMDB}
+\citation{zhang2015characterlevel}
+\citation{socher-etal-2013-recursive}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Methods}{1}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Preliminaries}{1}{subsection.2.1}\protected@file@percent }
-\newlabel{sec:method-preliminaries}{{2.1}{1}{Preliminaries}{subsection.2.1}{}}
 \citation{pennington2014glove}
 \citation{mikolov2013efficient}
 \citation{mikolov2018advances}
+\citation{Golub2018}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Methods}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Preliminaries}{2}{subsection.2.1}\protected@file@percent }
+\newlabel{sec:method-preliminaries}{{2.1}{2}{Preliminaries}{subsection.2.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Training}{2}{subsection.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Fixed Point}{2}{subsection.2.3}\protected@file@percent }
 \newlabel{sec:method-fixed_point}{{2.3}{2}{Fixed Point}{subsection.2.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{2}{section.3}\protected@file@percent }
 \citation{maheswaranathan2019reverse}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Dynamics are low dimensional}{3}{section.3}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:-images-gru_1layer_explained_variance-png}{{1a}{3}{\relax }{figure.caption.2}{}}
 \newlabel{sub@fig:-images-gru_1layer_explained_variance-png}{{a}{3}{\relax }{figure.caption.2}{}}
@@ -36,53 +43,77 @@
 \newlabel{fig:-images-gru_1layer_fixed_points-png}{{1c}{3}{\relax }{figure.caption.2}{}}
 \newlabel{sub@fig:-images-gru_1layer_fixed_points-png}{{c}{3}{\relax }{figure.caption.2}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  (\ref  {fig:-images-gru_1layer_explained_variance-png}) Explained Variance for a trained 1 layer GRU on IMDB versus untrained. The first few dimensions rapidly explain 90\% of the variance. Only the first 50 dimensions are shown. (\ref  {fig:-images-gru_1layer_PCA-png}) First 2 PCA components on the 1 layer model colored by labels. The evolution of the hidden state of a positive and negative examples are overlayed. (\ref  {fig:-images-gru_1layer_fixed_points-png}) 500 hidden states sampled and updated until convergeance as described in (\ref  {sec:method-fixed_point}). \relax }}{3}{figure.caption.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Dynamics are low dimensional}{3}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}PCA}{3}{subsubsection.3.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}PCA}{3}{subsection.3.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Explained Variance for a trained 3 layer GRU on IMDB versus untrained. Contrary to the 1 layer model, the first layer requires many more dimensions to explain the same variance. The second and third layer requires much less dimension to explain the same level of variance compared to the 1 layer model. Only the first 50 dimensions are shown. \relax }}{3}{figure.caption.3}\protected@file@percent }
 \newlabel{fig:-images-gru_3layer_explained_variance-png}{{2}{3}{Explained Variance for a trained 3 layer GRU on IMDB versus untrained. Contrary to the 1 layer model, the first layer requires many more dimensions to explain the same variance. The second and third layer requires much less dimension to explain the same level of variance compared to the 1 layer model. Only the first 50 dimensions are shown. \relax }{figure.caption.3}{}}
 \citation{maheswaranathan2019reverse}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Projections}{4}{subsubsection.3.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Projections}{4}{subsection.3.2}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  First 2 PCA components on each of the 3 layer model, colored by labels. The evolution of the hidden state of a positive and negative example are overlayed. \relax }}{4}{figure.caption.4}\protected@file@percent }
 \newlabel{fig:-images-gru_3layer_PCA-png}{{3}{4}{First 2 PCA components on each of the 3 layer model, colored by labels. The evolution of the hidden state of a positive and negative example are overlayed. \relax }{figure.caption.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Fixed Points}{5}{subsubsection.3.1.3}\protected@file@percent }
-\newlabel{subsec:fixed-points}{{3.1.3}{5}{Fixed Points}{subsubsection.3.1.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Fixed Points}{5}{subsection.3.3}\protected@file@percent }
+\newlabel{subsec:fixed-points}{{3.3}{5}{Fixed Points}{subsection.3.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Fixed points for 2 layer GRU\relax }}{5}{figure.caption.5}\protected@file@percent }
 \newlabel{fig:-images-gru_3layer_fixed_points-png}{{4}{5}{Fixed points for 2 layer GRU\relax }{figure.caption.5}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.4}Linearization}{5}{subsubsection.3.1.4}\protected@file@percent }
 \citation{maheswaranathan2019reverse}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Eigenvalues of the linearization around different fixed points for the 1-layer model\relax }}{6}{figure.caption.6}\protected@file@percent }
-\newlabel{fig:-images-gru_1layer_eig-png}{{5}{6}{Eigenvalues of the linearization around different fixed points for the 1-layer model\relax }{figure.caption.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Eigenvalues of the linearization around different fixed points for the 3-layer model\relax }}{6}{figure.caption.7}\protected@file@percent }
-\newlabel{fig:-images-gru_3layer_eig-png}{{6}{6}{Eigenvalues of the linearization around different fixed points for the 3-layer model\relax }{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Linearization}{6}{subsection.3.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Eigenvalues of the linearization around different fixed points for the 1-layer model. The unit circle is show in black.\relax }}{6}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:-images-gru_1layer_eig-png}{{5}{6}{Eigenvalues of the linearization around different fixed points for the 1-layer model. The unit circle is show in black.\relax }{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Eigenvalues of the linearization around different fixed points for the 3-layer model. The unit circle is shown in black.\relax }}{7}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:-images-gru_3layer_eig-png}{{6}{7}{Eigenvalues of the linearization around different fixed points for the 3-layer model. The unit circle is shown in black.\relax }{figure.caption.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{7}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Futur direction}{7}{section.5}\protected@file@percent }
-\newlabel{sec:futur-direction}{{5}{7}{Futur direction}{section.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A}Model architecture}{7}{subsection.Alph0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B}Another appendix Subsection}{8}{subsection.Alph0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {C}2 layers}{8}{subsection.Alph0.3}\protected@file@percent }
-\newlabel{anx:2-layers}{{C}{8}{2 layers}{subsection.Alph0.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces 2 layers GRU explained variance\relax }}{8}{figure.caption.9}\protected@file@percent }
-\newlabel{fig:-images-gru_2layer_explained_variance-png}{{7}{8}{2 layers GRU explained variance\relax }{figure.caption.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces 2 layers GRU PCA\relax }}{8}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:-images-gru_2layer_PCA-png}{{8}{8}{2 layers GRU PCA\relax }{figure.caption.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces 2 layers GRU fixed points\relax }}{8}{figure.caption.11}\protected@file@percent }
-\newlabel{fig:-images-gru_2layer_fixed_points-png}{{9}{8}{2 layers GRU fixed points\relax }{figure.caption.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces 2 layers GRU eigenvalues\relax }}{9}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:-images-gru_2layer_eig-png}{{10}{9}{2 layers GRU eigenvalues\relax }{figure.caption.12}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {D}4 layers}{9}{subsection.Alph0.4}\protected@file@percent }
-\newlabel{anx:4-layers}{{D}{9}{4 layers}{subsection.Alph0.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces 4 layers GRU explained variance\relax }}{9}{figure.caption.13}\protected@file@percent }
-\newlabel{fig:-images-gru_4layer_explained_variance-png}{{11}{9}{4 layers GRU explained variance\relax }{figure.caption.13}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces 4 layers GRU PCA\relax }}{9}{figure.caption.14}\protected@file@percent }
-\newlabel{fig:-images-gru_4layer_PCA-png}{{12}{9}{4 layers GRU PCA\relax }{figure.caption.14}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces 4 layers GRU fixed points\relax }}{10}{figure.caption.15}\protected@file@percent }
-\newlabel{fig:-images-gru_4layer_fixed_points-png}{{13}{10}{4 layers GRU fixed points\relax }{figure.caption.15}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces 4 layers GRU eigenvalues\relax }}{10}{figure.caption.16}\protected@file@percent }
-\newlabel{fig:-images-gru_4layer_eig-png}{{14}{10}{4 layers GRU eigenvalues\relax }{figure.caption.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}2 layers GRU}{7}{subsection.4.1}\protected@file@percent }
+\citation{ribeiro2016i}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}4 layers GRU}{8}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}3 layers GRU with embedding of 50 dimensions}{8}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Futur direction}{8}{section.5}\protected@file@percent }
+\newlabel{sec:futur-direction}{{5}{8}{Futur direction}{section.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{9}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A}Performances}{10}{subsection.Alph0.1}\protected@file@percent }
+\newlabel{performances}{{A}{10}{Performances}{subsection.Alph0.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Loss values on different models for all datasets. Subscript is the number of GRU layers stacked, followed by the embedding dimensions\relax }}{10}{table.caption.9}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Binary accuaries on different models for all datasets. Subscript is the number of GRU layers stacked, followed by the embedding dimensions\relax }}{10}{table.caption.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B}2 layers}{10}{subsection.Alph0.2}\protected@file@percent }
+\newlabel{anx:2-layers}{{B}{10}{2 layers}{subsection.Alph0.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces 2 layers GRU explained variance\relax }}{10}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:-images-gru_2layer_explained_variance-png}{{7}{10}{2 layers GRU explained variance\relax }{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces 2 layers GRU PCA\relax }}{10}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:-images-gru_2layer_PCA-png}{{8}{10}{2 layers GRU PCA\relax }{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces 2 layers GRU fixed points\relax }}{11}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:-images-gru_2layer_fixed_points-png}{{9}{11}{2 layers GRU fixed points\relax }{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces 2 layers GRU eigenvalues\relax }}{11}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:-images-gru_2layer_eig-png}{{10}{11}{2 layers GRU eigenvalues\relax }{figure.caption.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C}3 layers - Embedding of 50 dimension}{11}{subsection.Alph0.3}\protected@file@percent }
+\newlabel{anx:3-layers-50}{{C}{11}{3 layers - Embedding of 50 dimension}{subsection.Alph0.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces 3 layers GRU explained variance\relax }}{11}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:-images-gru_3layer_50_explained_variance-png}{{11}{11}{3 layers GRU explained variance\relax }{figure.caption.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces 3 layers GRU PCA\relax }}{12}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:-images-gru_3layer_50_PCA-png}{{12}{12}{3 layers GRU PCA\relax }{figure.caption.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces 3 layers GRU fixed points\relax }}{12}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:-images-gru_3layer_50_fixed_points-png}{{13}{12}{3 layers GRU fixed points\relax }{figure.caption.17}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces 3 layers GRU eigenvalues\relax }}{12}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:-images-gru_3layer_50_eig-png}{{14}{12}{3 layers GRU eigenvalues\relax }{figure.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D}4 layers}{13}{subsection.Alph0.4}\protected@file@percent }
+\newlabel{anx:4-layers}{{D}{13}{4 layers}{subsection.Alph0.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces 4 layers GRU explained variance\relax }}{13}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:-images-gru_4layer_explained_variance-png}{{15}{13}{4 layers GRU explained variance\relax }{figure.caption.19}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces 4 layers GRU PCA\relax }}{13}{figure.caption.20}\protected@file@percent }
+\newlabel{fig:-images-gru_4layer_PCA-png}{{16}{13}{4 layers GRU PCA\relax }{figure.caption.20}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces 4 layers GRU fixed points\relax }}{13}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:-images-gru_4layer_fixed_points-png}{{17}{13}{4 layers GRU fixed points\relax }{figure.caption.21}{}}
 \bibstyle{plain}
 \bibdata{mat6115.bib}
-\bibcite{maheswaranathan2019reverse}{{1}{}{{}}{{}}}
-\bibcite{mikolov2013efficient}{{2}{}{{}}{{}}}
-\bibcite{mikolov2018advances}{{3}{}{{}}{{}}}
-\bibcite{pennington2014glove}{{4}{}{{}}{{}}}
+\bibcite{cho2014learning}{{1}{}{{}}{{}}}
+\bibcite{collins2016capacity}{{2}{}{{}}{{}}}
+\bibcite{Golub2018}{{3}{}{{}}{{}}}
+\bibcite{lstm}{{4}{}{{}}{{}}}
+\bibcite{IMDB}{{5}{}{{}}{{}}}
+\bibcite{maheswaranathan2019reverse}{{6}{}{{}}{{}}}
+\bibcite{mikolov2013efficient}{{7}{}{{}}{{}}}
+\bibcite{mikolov2018advances}{{8}{}{{}}{{}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces 4 layers GRU eigenvalues\relax }}{14}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:-images-gru_4layer_eig-png}{{18}{14}{4 layers GRU eigenvalues\relax }{figure.caption.22}{}}
+\bibcite{pennington2014glove}{{9}{}{{}}{{}}}
+\bibcite{ribeiro2016i}{{10}{}{{}}{{}}}
+\bibcite{socher-etal-2013-recursive}{{11}{}{{}}{{}}}
+\bibcite{zhang2015characterlevel}{{12}{}{{}}{{}}}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers

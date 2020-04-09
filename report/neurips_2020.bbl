@@ -1,4 +1,33 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{cho2014learning}
+Kyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Dzmitry Bahdanau, Fethi
+  Bougares, Holger Schwenk, and Yoshua Bengio.
+\newblock Learning phrase representations using rnn encoder-decoder for
+  statistical machine translation, 2014.
+
+\bibitem{collins2016capacity}
+Jasmine Collins, Jascha Sohl-Dickstein, and David Sussillo.
+\newblock Capacity and trainability in recurrent neural networks, 2016.
+
+\bibitem{Golub2018}
+Matthew Golub and David Sussillo.
+\newblock Fixedpointfinder: A tensorflow toolbox for identifying and
+  characterizing fixed points in recurrent neural networks.
+\newblock {\em Journal of Open Source Software}, 3(31):1003, 2018.
+
+\bibitem{lstm}
+Sepp Hochreiter and Jürgen Schmidhuber.
+\newblock Long short-term memory.
+\newblock {\em Neural computation}, 9:1735--80, 12 1997.
+
+\bibitem{IMDB}
+Andrew~L. Maas, Raymond~E. Daly, Peter~T. Pham, Dan Huang, Andrew~Y. Ng, and
+  Christopher Potts.
+\newblock Learning word vectors for sentiment analysis.
+\newblock In {\em Proceedings of the 49th Annual Meeting of the Association for
+  Computational Linguistics: Human Language Technologies - Volume 1}, HLT
+  ’11, page 142–150, USA, 2011. Association for Computational Linguistics.
 
 \bibitem{maheswaranathan2019reverse}
 Niru Maheswaranathan, Alex Williams, Matthew~D. Golub, Surya Ganguli, and David
@@ -22,5 +51,23 @@ Jeffrey Pennington, Richard Socher, and Christopher~D. Manning.
 \newblock Glove: Global vectors for word representation.
 \newblock In {\em Empirical Methods in Natural Language Processing (EMNLP)},
   pages 1532--1543, 2014.
+
+\bibitem{ribeiro2016i}
+Marco~Tulio Ribeiro, Sameer Singh, and Carlos Guestrin.
+\newblock "why should i trust you?": Explaining the predictions of any
+  classifier, 2016.
+
+\bibitem{socher-etal-2013-recursive}
+Richard Socher, Alex Perelygin, Jean Wu, Jason Chuang, Christopher~D. Manning,
+  Andrew Ng, and Christopher Potts.
+\newblock Recursive deep models for semantic compositionality over a sentiment
+  treebank.
+\newblock In {\em Proceedings of the 2013 Conference on Empirical Methods in
+  Natural Language Processing}, pages 1631--1642, Seattle, Washington, USA,
+  October 2013. Association for Computational Linguistics.
+
+\bibitem{zhang2015characterlevel}
+Xiang Zhang, Junbo Zhao, and Yann LeCun.
+\newblock Character-level convolutional networks for text classification, 2015.
 
 \end{thebibliography}

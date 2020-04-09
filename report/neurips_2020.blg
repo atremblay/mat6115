@@ -3,44 +3,44 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: neurips_2020.aux
 The style file: plain.bst
 Database file #1: mat6115.bib
-You've used 4 entries,
+You've used 12 entries,
             2118 wiz_defined-function locations,
-            516 strings with 4844 characters,
-and the built_in function-call counts, 1526 in all, are:
-= -- 133
-> -- 97
-< -- 1
-+ -- 38
-- -- 34
-* -- 101
-:= -- 248
-add.period$ -- 10
-call.type$ -- 4
-change.case$ -- 29
+            562 strings with 6521 characters,
+and the built_in function-call counts, 4593 in all, are:
+= -- 423
+> -- 286
+< -- 3
++ -- 112
+- -- 100
+* -- 310
+:= -- 739
+add.period$ -- 32
+call.type$ -- 12
+change.case$ -- 86
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 53
-empty$ -- 117
-format.name$ -- 34
-if$ -- 321
+cite$ -- 12
+duplicate$ -- 161
+empty$ -- 333
+format.name$ -- 100
+if$ -- 977
 int.to.chr$ -- 0
-int.to.str$ -- 4
-missing$ -- 2
-newline$ -- 21
-num.names$ -- 8
-pop$ -- 46
+int.to.str$ -- 12
+missing$ -- 6
+newline$ -- 57
+num.names$ -- 24
+pop$ -- 122
 preamble$ -- 1
-purify$ -- 25
+purify$ -- 74
 quote$ -- 0
-skip$ -- 46
+skip$ -- 147
 stack$ -- 0
-substring$ -- 60
-swap$ -- 17
-text.length$ -- 1
+substring$ -- 191
+swap$ -- 55
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 16
+type$ -- 48
 warning$ -- 0
-while$ -- 11
-width$ -- 5
-write$ -- 39
+while$ -- 33
+width$ -- 14
+write$ -- 120
