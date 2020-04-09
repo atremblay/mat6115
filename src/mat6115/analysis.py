@@ -202,12 +202,18 @@ def main(
     if fixed_point:
         random_idx = np.arange(trained_hidden_states.shape[1])
         np.random.shuffle(random_idx)
-        random_idx = random_idx[:1000]
+        random_idx = random_idx[:500]
         # trained_hidden_states = trained_hidden_states[:, random_idx]
         hidden_states = (
             torch.tensor(trained_hidden_states[rnn_layer, random_idx])
             .unsqueeze(0)
             .to(device)
+        )
+
+        # Save the starting fixed points before running FixedPointFinder
+        np.save(
+            open(save_path / "starting_fixed_points.npy", "wb"),
+            hidden_states.detach().cpu().numpy(),
         )
 
         input_dim = trained_model.network.rnn[rnn_layer].input_size

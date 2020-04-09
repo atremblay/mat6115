@@ -133,6 +133,7 @@ def main():
             dataset=args.dataset,
             embedding=args.embedding,
             device=device,
+            save_path=args.save_path,
         )
     elif args.tool == "artifacts":
         print("Running `artifacts` tool")
